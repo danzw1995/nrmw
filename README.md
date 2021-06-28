@@ -11,7 +11,15 @@
 ## 构建
 
 ```bash
-g++ main.cpp -o nrmw
+g++ -c ./lib/func/func.cpp -o ./lib/func/func.o
+```
+
+```bash
+ar -crv ./lib/func/libfunc.a ./lib/func/func.o
+```
+
+```bash
+g++ main.cpp lib/func/libfunc.a -o nrmw
 ```
 
 ## 使用
