@@ -2,12 +2,17 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 #define FILE_PATH ".nrmwrc"
 
 class Config {
 public:
+  Config (string k, string v) {
+    key = k;
+    value = v;
+  }
   string key;
   string value;
 };
@@ -26,8 +31,6 @@ void ls() {
   } else {
     while (!f.eof()) {
       getline(f, strLine);
-
-      Config config;
       size_t p = strLine.find("=");
       string key = strLine.substr(0, p);
       if (key == "home") {
@@ -47,8 +50,10 @@ void ls() {
         } else {
           s = "npm";
         }
+        break;
       }
     }
+    f.close();
   }
 
   cout << (s == "npm" ? "* " : "  ") << "npm -----  https://registry.npmjs.org/" << endl;
@@ -97,7 +102,7 @@ void use(string key) {
     ofs << "registry=" << registry << endl;
     ofs.close();
   } else {
-    Config arr[100];
+    vector <Config> vc;
     string str;
 
     while (!ifs.eof()) {
@@ -115,18 +120,16 @@ void use(string key) {
       } else {
         value = str.substr(p + 1);
       }
-      Config config;
-      config.key = key;
-      config.value = value;
-      arr[size++] = config;
+      vc.emplace_back(key, value);
     }
 
     ifs.close();
 
     ofstream ofs;
     ofs.open(getName(), ios::out);
-    for (int i = 0; i < size; i++) {
-      ofs << arr[i].key << "=" << arr[i].value << endl;
+    size_t size = vc.size();
+    for (size_t i = 0; i < size; i++) {
+      ofs << vc[i].key << "=" << vc[i].value << endl;
     }
     ofs.close();
   }
