@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-#define FILE_PATH "C:\\Users\\wangzhidan\\.nrmwrc"
+#define FILE_PATH ".nrmwrc"
 
 class Config {
 public:
@@ -12,10 +12,15 @@ public:
   string value;
 };
 
+string getName() {
+  string home_path = getenv("homepath");
+  return "C:" + home_path + "\\" + FILE_PATH;
+}
+
 void ls() {
   string s;
   string strLine;
-  ifstream f(FILE_PATH, ios::in);
+  ifstream f(getName(), ios::in);
   if (!f.is_open()) {
     s = "npm";
   } else {
@@ -82,12 +87,12 @@ void use(string key) {
 
   ifstream ifs;
   int size = 0;
-  ifs.open(FILE_PATH, ios::in);
+  ifs.open(getName(), ios::in);
 
   if (!ifs.is_open()) {
     ifs.close();
     ofstream ofs;
-    ofs.open(FILE_PATH, ios::out);
+    ofs.open(getName(), ios::out);
     ofs << "home=" << home << endl;
     ofs << "registry=" << registry << endl;
     ofs.close();
@@ -119,7 +124,7 @@ void use(string key) {
     ifs.close();
 
     ofstream ofs;
-    ofs.open(FILE_PATH, ios::out);
+    ofs.open(getName(), ios::out);
     for (int i = 0; i < size; i++) {
       ofs << arr[i].key << "=" << arr[i].value << endl;
     }
