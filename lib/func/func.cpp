@@ -2,19 +2,15 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include "func.h"
 using namespace std;
 
 #define FILE_PATH ".nrmwrc"
 
-class Config {
-public:
-  Config (string k, string v) {
-    key = k;
-    value = v;
-  }
-  string key;
-  string value;
-};
+Config::Config(const string &k, const string &v) {
+  key = k;
+  value = v;
+}
 
 string getName() {
   string home_path = getenv("homepath");
@@ -85,7 +81,7 @@ void use(const string &key) {
     home = "https://skimdb.npmjs.com/";
     registry = "https://skimdb.npmjs.com/registry";
   } else {
-    cout << " Not find registry: " << "1q23123" << endl;
+    cout << " Not find registry: " << key << endl;
     return;
   }
 

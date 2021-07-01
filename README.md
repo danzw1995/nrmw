@@ -10,6 +10,7 @@
 
 ## 构建
 
+### 静态链接库
 ```bash
 g++ -c ./lib/func/func.cpp -o ./lib/func/func.o
 ```
@@ -20,6 +21,16 @@ ar -crv ./lib/func/libfunc.a ./lib/func/func.o
 
 ```bash
 g++ main.cpp lib/func/libfunc.a -o nrmw
+```
+
+### 动态链接库
+
+```bash
+g++ ./lib/func/func.cpp -I ./lib/func  -fPIC -shared -o libdynfunc.dll
+```
+
+```bash
+g++ main.cpp libdynfunc.dll -o nrmw
 ```
 
 ## 使用

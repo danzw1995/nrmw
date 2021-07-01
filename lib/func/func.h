@@ -1,19 +1,17 @@
 #include <iostream>
 #include <string>
-using namespace std;
-
 class Config {
   public:
-    Config(){}
-    string key;
-    string value;
+    Config (const std::string &k, const std::string &v);
+    std::string key;
+    std::string value;
 };
 
-string getName();
+std::string getName();
 
 void ls();
 
-void use(const string &key);
+void use(const std::string &key);
 
 
 
