@@ -6,6 +6,14 @@
 using namespace std;
 
 #define FILE_PATH ".nrmwrc"
+class Config {
+  public:
+    Config (const std::string &k, const std::string &v);
+    std::string key;
+    std::string value;
+};
+
+std::string getName();
 
 Config::Config(const string &k, const string &v) {
   key = k;
@@ -59,9 +67,10 @@ void ls() {
 }
 
 
-void use(const string &key) {
+void use(const char* k) {
   string home;
   string registry;
+  string key = string(k);
   if (key == "npm") {
     home = "https://www.npmjs.org";
     registry = "https://registry.npmjs.org/";

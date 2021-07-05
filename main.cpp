@@ -12,7 +12,8 @@ int main(int argc, char** argv) {
   if (p == "ls") {
     ls();
   } else if (p == "use") {
-    use(*++temp);
+    const char* params = *++temp;
+    use(params);
   }
   return 0;
 }
