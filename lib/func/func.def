@@ -1,0 +1,4 @@
+LIBRARY "FUNC.DLL"
+  EXPORTS
+       ls @1
+       use @2

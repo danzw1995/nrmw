@@ -3,7 +3,6 @@
 #include <fstream>
 #include <vector>
 #include "func.h"
-using namespace std;
 
 #define FILE_PATH ".nrmwrc"
 class Config {
@@ -15,29 +14,36 @@ class Config {
 
 std::string getName();
 
-Config::Config(const string &k, const string &v) {
+Config::Config(const std::string &k, const std::string &v) {
   key = k;
   value = v;
 }
 
-string getName() {
-  string home_path = getenv("homepath");
-  return "C:" + home_path + "\\" + FILE_PATH;
+std::string getName() {
+  std::string fullPath = "";
+  #ifdef __linux__
+  fullPath = std::string(getenv("HOME")) + "/" + FILE_PATH;
+  #endif
+  #ifdef WIN32
+  fullPath = "C:" + std::string(getenv("homepath")) + "\\" + FILE_PATH;
+  #endif
+  std::cout << "fullPath =" << fullPath << std::endl;
+  return fullPath;
 }
 
 void ls() {
-  string s;
-  string strLine;
-  ifstream f(getName(), ios::in);
+  std::string s;
+  std::string strLine;
+  std::ifstream f(getName(), std::ios::in);
   if (!f.is_open()) {
     s = "npm";
   } else {
     while (!f.eof()) {
       getline(f, strLine);
       size_t p = strLine.find("=");
-      string key = strLine.substr(0, p);
+      std::string key = strLine.substr(0, p);
       if (key == "home") {
-        string value = strLine.substr(p + 1);
+        std::string value = strLine.substr(p + 1);
         if (value == "https://www.npmjs.org") {
           s = "npm";
         } else if (value == "https://yarnpkg.com") {
@@ -58,19 +64,19 @@ void ls() {
     }
     f.close();
   }
-  cout << (s == "npm" ? "* " : "  ") << "npm -----  https://registry.npmjs.org/" << endl;
-  cout << (s == "yarn" ? "* " : "  ") << "yarn ----- https://registry.yarnpkg.com" << endl;
-  cout << (s == "cnpm" ? "* " : "  ") << "cnpm ----  http://r.cnpmjs.org/" << endl;
-  cout << (s == "taobao" ? "* " : "  ") << "taobao --  https://registry.npm.taobao.org/" << endl;
-  cout << (s == "nj" ? "* " : "  ") << "nj ------  https://registry.nodejitsu.com/" << endl;
-  cout << (s == "skimdb" ? "* " : "  ") << "skimdb --  https://skimdb.npmjs.com/registry" << endl;
+  std::cout << (s == "npm" ? "* " : "  ") << "npm -----  https://registry.npmjs.org/" << std::endl;
+  std::cout << (s == "yarn" ? "* " : "  ") << "yarn ----- https://registry.yarnpkg.com" << std::endl;
+  std::cout << (s == "cnpm" ? "* " : "  ") << "cnpm ----  http://r.cnpmjs.org/" << std::endl;
+  std::cout << (s == "taobao" ? "* " : "  ") << "taobao --  https://registry.npm.taobao.org/" << std::endl;
+  std::cout << (s == "nj" ? "* " : "  ") << "nj ------  https://registry.nodejitsu.com/" << std::endl;
+  std::cout << (s == "skimdb" ? "* " : "  ") << "skimdb --  https://skimdb.npmjs.com/registry" << std::endl;
 }
 
 
 void use(const char* k) {
-  string home;
-  string registry;
-  string key = string(k);
+  std::string home;
+  std::string registry;
+  std::string key = std::string(k);
   if (key == "npm") {
     home = "https://www.npmjs.org";
     registry = "https://registry.npmjs.org/";
@@ -90,34 +96,34 @@ void use(const char* k) {
     home = "https://skimdb.npmjs.com/";
     registry = "https://skimdb.npmjs.com/registry";
   } else {
-    cout << " Not find registry: " << key << endl;
+    std::cout << " Not find registry: " << key << std::endl;
     return;
   }
 
-  ifstream ifs;
+  std::ifstream ifs;
   int size = 0;
-  ifs.open(getName(), ios::in);
+  ifs.open(getName(), std::ios::in);
 
   if (!ifs.is_open()) {
     ifs.close();
-    ofstream ofs;
-    ofs.open(getName(), ios::out);
-    ofs << "home=" << home << endl;
-    ofs << "registry=" << registry << endl;
+    std::ofstream ofs;
+    ofs.open(getName(), std::ios::out);
+    ofs << "home=" << home << std::endl;
+    ofs << "registry=" << registry << std::endl;
     ofs.close();
   } else {
-    vector <Config> vc;
+    std::vector <Config> vc;
     vc.reserve(6);
-    string str;
+    std::string str;
 
     while (!ifs.eof()) {
-      getline(ifs, str);
+      std::getline(ifs, str);
       size_t p = str.find("=");
       if (p == -1) {
         continue;
       }
-      string key = str.substr(0, p);
-      string value;
+      std::string key = str.substr(0, p);
+      std::string value;
       if (key == "home") {
         value = home;
       } else if (key == "registry") {
@@ -130,13 +136,13 @@ void use(const char* k) {
 
     ifs.close();
 
-    ofstream ofs;
-    ofs.open(getName(), ios::out);
+    std::ofstream ofs;
+    ofs.open(getName(), std::ios::out);
     size_t size = vc.size();
     for (size_t i = 0; i < size; i++) {
-      ofs << vc[i].key << "=" << vc[i].value << endl;
+      ofs << vc[i].key << "=" << vc[i].value << std::endl;
     }
     ofs.close();
-    cout << "Registry has been set to: " << home << endl;
+    std::cout << "Registry has been set to: " << home << std::endl;
   }
 }
