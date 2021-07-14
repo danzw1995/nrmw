@@ -53,6 +53,16 @@ g++ ./lib/func/func.cpp -I ./lib/func  -fPIC -shared -o libdynfunc.dll
 g++ main.cpp libdynfunc.dll -o nrmw
 ```
 
+or 显示调用
+
+```bash
+g++ ./lib/func/func.cpp ./lib/func/func.def -I ./lib/func  -fPIC -shared -o libdynfunc.dll
+```
+
+```bash
+g++ main.cpp  -D LOAD_L -o nrmw
+```
+
 #### MSVC
 
 ```bash

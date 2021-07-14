@@ -27,7 +27,6 @@ std::string getName() {
   #ifdef WIN32
   fullPath = "C:" + std::string(getenv("homepath")) + "\\" + FILE_PATH;
   #endif
-  std::cout << "fullPath =" << fullPath << std::endl;
   return fullPath;
 }
 
