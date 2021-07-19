@@ -1,5 +1,9 @@
 #include <iostream>
-#ifndef LOAD_L
+#ifdef LOAD_L
+#elif DL_OPEN
+#include <dlfcn.h>
+#else
+// #ifndef LOAD_L
 #include "./lib/func/func.h"
 #endif
 using namespace std;
@@ -27,6 +31,19 @@ int main(int argc, char** argv) {
       ls = (ptrLs)GetProcAddress(hdll, "ls");
       use = (ptrUse)GetProcAddress(hdll, "use");
     }
+  #elif DL_OPEN
+  void* handle = dlopen("libdynfunc.so", RTLD_LAZY);
+  if (!handle) {
+    cerr << "Cannot open library: " << dlerror() << '\n';
+    return 1;
+  }
+  typedef void(*ptrLs)();
+  typedef void(*ptrUse)(const char*);
+  
+  ptrLs ls = (ptrLs) dlsym(handle, "ls");
+  ptrUse use = (ptrUse) dlsym(handle, "use");
+
+  #else
   #endif
 
   char** temp = argv;
@@ -44,6 +61,8 @@ int main(int argc, char** argv) {
 
   #ifdef LOAD_L
   FreeLibrary(hdll);
+  #elif DL_OPEN
+  dlclose(handle);
   #endif
 
   return 0;

@@ -55,6 +55,8 @@ g++ main.cpp libdynfunc.dll -o nrmw
 
 or 显示调用
 
+##### windows
+
 ```bash
 g++ ./lib/func/func.cpp ./lib/func/func.def -I ./lib/func  -fPIC -shared -o libdynfunc.dll
 ```
@@ -62,6 +64,22 @@ g++ ./lib/func/func.cpp ./lib/func/func.def -I ./lib/func  -fPIC -shared -o libd
 ```bash
 g++ main.cpp  -D LOAD_L -o nrmw
 ```
+
+##### linux
+
+```bash
+g++ ./lib/func/func.cpp -std=c++11 -I ./lib/func  -fPIC -shared -o libdynfunc.so
+```
+
+```bash
+g++ main.cpp  -D DL_OPEN -o nrmw -ldl
+```
+
+将当前库文件加入到库文件搜索目录环境变量
+```bash
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+```
+
 
 #### MSVC
 
